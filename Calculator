@@ -1,0 +1,92 @@
+import java.util.Scanner;
+public class Main {
+    public static void main(String[] args) throws Exception {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Введите два числа: ");
+        String priem = scanner.nextLine();
+        System.out.println(parse(priem));
+    }
+    public static String parse(String expression) throws Exception {
+        int val0;
+        int val1;
+        String znak;
+        String result;
+        boolean Rimsk;
+        String[] operands = expression.split("[+\\-*/]");
+        if (operands.length != 2) throw new Exception("Должно быть два операнда");
+        znak = detectOperation(expression);
+        if (znak == null) throw new Exception("Неподдерживаемая математическая операция");
+        if (Rimskie.Rimsk(operands[0]) && Rimskie.Rimsk(operands[1])) {
+            val0 = Rimskie.convertToArabian(operands[0]);
+            val1 = Rimskie.convertToArabian(operands[1]);
+            Rimsk = true;
+        }
+        else if (!Rimskie.Rimsk(operands[0]) && !Rimskie.Rimsk(operands[1])) {
+            val0 = Integer.parseInt(operands[0]);
+            val1 = Integer.parseInt(operands[1]);
+            Rimsk = false;
+        }
+        else {
+            throw new Exception("Введите числа в едином формате");
+        }
+        if (val0 > 10 || val1 > 10) {
+            throw new Exception("Числа должны до 10");
+        }
+        int arabian = calc(val0, val1, znak);
+        if (Rimsk) {
+            if (arabian <= 0) {
+                throw new Exception("Введено число меньшу нуля");
+            }
+            result = Rimskie.convertToMakka(arabian);
+        } else {
+            result = String.valueOf(arabian);
+        }
+        return result;
+    }
+    static String detectOperation(String priem) {
+        if (priem.contains("+")) return "+";
+        else if (priem.contains("-")) return "-";
+        else if (priem.contains("*")) return "*";
+        else if (priem.contains("/")) return "/";
+        else return null;
+    }
+    static int calc(int a, int b, String oper) {
+
+        if (oper.equals("+")) return a + b;
+        else if (oper.equals("-")) return a - b;
+        else if (oper.equals("*")) return a * b;
+        else return a / b;
+    }
+
+}
+
+class Rimskie {
+    static String[] makkaArray = new String[]{"0", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI",
+            "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX", "XX", "XXI", "XXII", "XXIII", "XXIV",
+            "XXV", "XXVI", "XXVII", "XXVIII", "XXIX", "XXX", "XXXI", "XXXII", "XXXIII", "XXXIV", "XXXV", "XXXVI",
+            "XXXVII", "XXXVIII", "XXXIX", "XL", "XLI", "XLII", "XLIII", "XLIV", "XLV", "XLVI", "XLVII", "XLVIII",
+            "XLIX", "L", "LI", "LII", "LIII", "LIV", "LV", "LVI", "LVII", "LVIII", "LIX", "LX", "LXI", "LXII",
+            "LXIII", "LXIV", "LXV", "LXVI", "LXVII", "LXVIII", "LXIX", "LXX", "LXXI", "LXXII", "LXXIII", "LXXIV",
+            "LXXV", "LXXVI", "LXXVII", "LXXVIII", "LXXIX", "LXXX", "LXXXI", "LXXXII", "LXXXIII", "LXXXIV", "LXXXV",
+            "LXXXVI", "LXXXVII", "LXXXVIII", "LXXXIX", "XC", "XCI", "XCII", "XCIII", "XCIV", "XCV", "XCVI", "XCVII",
+            "XCVIII", "XCIX", "C"};
+    public static boolean Rimsk(String val) {
+        for (int i = 0; i < makkaArray.length; i++) {
+            if (val.equals(makkaArray[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public static int convertToArabian(String makka) {
+        for (int i = 0; i < makkaArray.length; i++) {
+            if (makka.equals(makkaArray[i])) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    public static String convertToMakka(int arabian) {
+        return makkaArray[arabian];
+    }
+}
